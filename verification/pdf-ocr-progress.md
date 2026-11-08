@@ -1,0 +1,27 @@
+# PDF OCR progress: verification and limits
+
+The owner baseline is commit `f37740110f03cb0ba6646eff6a1f96a5f1c4b42e`, tree `d37ee831ae136f9d5ed1a387cc829131e53485b9`. This update changes five engine/attribution paths, the README and this note. All other owner bytes and modes, licences, contributor records and inactive CI files remain at the baseline.
+
+OCR page selection deduplicates valid requests in first-request order, preserves empty-as-all-pages behavior and bounds the page-indexed reservation by the document page count. Existing cancellation, stale-job and apply guards remain unchanged. Forty-three original OCR tests are a subset of the current engine test run, not additional tests. Two actual defective-source controls failed before restoration in the original source packet. This is a bounded adaptation of an upstream proposal, not acceptance of that whole PR or its broader claims.
+
+Three maintenance paths retain malformed-path/page-tree behavior and finite OCR geometry checks. The `width <= 0` rejection remains separate because NaN differs from a negated positive comparison. The unchanged asset generator removed nine already-absent stale artwork notice rows from ATTRIBUTION.md; the attribution manifest, notices and actual assets remain unchanged. No new acquired code, artwork or dependency is introduced.
+
+Matching Rust/Cargo1.95.0 and matching rustfmt/Clippy were used with pinned vendors, lockfile, fonts, the correct PDF-specific locale input, frozen/offline arguments, a reused target cache and an actual EPERM network probe. Required results: formatting; all-target Clippy with warnings denied for engine/edit/redact/ocr; 1,364 passing tests, seven ignored cases, ten nonempty harnesses and four empty doctest harnesses; layers39 crates; assets249 repository/6 dependency-bundled/22 build-input assets; 33 declared WASM crate-library checks; and CLI build. Earlier failures are preserved. Some font/model-dependent test bodies returned early, so passing counts do not prove those bodies ran. WASM compile checks do not establish a browser runtime.
+
+The cumulative source freeze SHA256 is `ec13fa3d1ecaa4db94bf9b2727a1620196f4ae34b1d55fa68af19227a172e1e7`; independent review output manifest SHA256 is `348393adc2a2dd3aac1d00eeb192049a246c26b147d21d07f5250cf3e8efb421`. Its strict read-only evidence and acceptance oracles passed exact parent replay after native return. This review covers the source, exact locale input and recorded quality evidence; it does not select later distribution artifacts.
+
+The separately prepared native archive `pdfcraft-ocr-progress-macos-arm64-cli.tar.gz` is57,161,420 bytes, SHA256 `d4ff121044d3ee8b8b3d40fec85f33f2e1913b0bb2773d990fcd4a5b0dbfb386`. Its debug CLI is100,559,904 bytes, SHA256 `11cae8f5325841200f82650f40eee9d6049c621119c79ec295f2ac1c9b149139`. Default Latin detection/recognition models are unmodified, attributed to Robert Knight and include full CC-BY-SA4.0 licence texts. Models are discovered beside the executable with no model environment variable. Optional external Tesseract is not bundled.
+
+All1,293 extracted files were verified in a path containing spaces and Unicode. Fourteen actual CLI commands ran with only PATH(empty directory), TMPDIR and LANG in the child environment, and macOS OS network denial. They cover version, synthetic PDF info/text/render, an image-only PDF with no searchable text, model discovery, real OCR/save, searchable reopen, Unicode title edit/add-blank/save/reopen, and malformed-input/invalid-page refusals preserving the prior destination. Native smoke receipt SHA256 is `4f8f750e1c6626250e2a3a1de46e59f585ac2ac5d1a34e2f9922033f370de792`. These synthetic workflows do not establish general OCR accuracy, document safety or format fidelity.
+
+The exact offline locale archive is `craft-i18n-575cfdef63227b14daf173b8cc87928bfdfa325e-pdf-offline.tar.gz`,3,963,001 bytes, SHA256 `bddb88a08a1858995884af63ae75344a4da3df0c50300395e9121b051dce3160`. It contains44 PDF catalogs,44 common catalogs and three original legal files plus provenance/instructions. Original catalog bytes are unchanged. Extract it and set CRAFT_I18N_DIR to its inner craft-i18n directory with CRAFT_I18N_REQUIRED=1; do not substitute the older Word-only input. Native CLI execution itself needs neither Cargo nor this rebuild-only locale archive.
+
+The source archive contains the complete intended owner tree, not a prebuilt desktop/browser distribution. Rebuilds also need the separately hosted compatible Rust tools, vendor inputs, fonts, platform linker and SDK. Captured vendor/support legal references are a superset, not a linked-crate SBOM or a new licence audit. Original baseline runtime downloads do not contain these new changes. Fresh independent distribution review, exact public downloads and platform runtime checks remain separate gates. Windows11, macOS Intel, native GUI, full browser/WASM runtime, private Node host, general OCR/font correctness, resource exhaustion resistance and Microsoft/Adobe parity remain open.
+
+Selected source hashes:
+
+- `crates/engine/src/ocr.rs`: `a86d161397a14293cd5fdac7fe2d5356af219c4754ac3ac8c690155ad8da502f`
+- `crates/edit/src/images.rs`: `f841cf1eeecbb16854bc4559746434f668ccb9b75127182bb3b66229b4c4f920`
+- `crates/redact/src/pattern_guard.rs`: `69c85f547ff704a1bf1577c5f2cf8f8920cff8ff563178815a01cabc198e83c5`
+- `crates/ocr/src/lib.rs`: `e61d439aa85f427532775917e85fa8f5dd5425ff9b9cbd4e769c11fc71551e43`
+- `ATTRIBUTION.md`: `d9d1bbef9fa4940e8cd1f12690010a6cdc1570831c2ba36c90c63b8115002122`
